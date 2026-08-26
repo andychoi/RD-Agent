@@ -93,9 +93,9 @@ model_hypothesis_specification: |-
   8. Use standard libraries for baseline models, but also explore custom architecture designs to investigate novel structures. After sufficient trials with traditional models, aim for innovation comparable to top-tier AI conferences (NeurIPS, ICLR, ICML, SIGKDD, etc.) in time series modeling.
 
 factor_hypothesis_specification: |-
-  1. **1-5 Factors per Generation:**
-    - Ensure each generation produces 1-5 factors.
-    - Balance simplicity and complexity to build a robust factor library.
+  1. **Exactly 1 Factor per Generation:**
+    - Produce exactly one factor, never more.
+    - This is a smoke test: choose one simple, robust factor that can be implemented using only daily OHLCV data.
     - Make full use of the financial data provided to you instead of focusing solely on a specific field.
   2. **Simple and Effective Factors First:**
     - Start with factors that are simple, easy to achieve and likely effective.

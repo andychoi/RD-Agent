@@ -4,6 +4,7 @@ from typing import List, Tuple
 from rdagent.components.coder.factor_coder.factor import FactorExperiment, FactorTask
 from rdagent.components.proposal import FactorHypothesis2Experiment, FactorHypothesisGen
 from rdagent.core.proposal import Hypothesis, Scenario, Trace
+from rdagent.app.qlib_rd_loop.conf import FACTOR_PROP_SETTING
 from rdagent.scenarios.qlib.experiment.factor_experiment import QlibFactorExperiment
 from rdagent.scenarios.qlib.experiment.model_experiment import QlibModelExperiment
 from rdagent.scenarios.qlib.experiment.quant_experiment import QlibQuantScenario
@@ -95,7 +96,7 @@ class QlibFactorHypothesis2Experiment(FactorHypothesis2Experiment):
         response_dict = json.loads(response)
         tasks = []
 
-        for factor_name in response_dict:
+        for factor_name in list(response_dict)[: FACTOR_PROP_SETTING.max_factors_per_exp]:
             description = response_dict[factor_name]["description"]
             formulation = response_dict[factor_name]["formulation"]
             variables = response_dict[factor_name]["variables"]

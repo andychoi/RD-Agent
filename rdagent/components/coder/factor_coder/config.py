@@ -1,10 +1,11 @@
-import os
+import sys
+from pathlib import Path
 from typing import Optional
 
 from pydantic_settings import SettingsConfigDict
 
 from rdagent.components.coder.CoSTEER.config import CoSTEERSettings
-from rdagent.utils.env import CondaConf, Env, LocalEnv
+from rdagent.utils.env import Env, LocalConf, LocalEnv
 
 
 class FactorCoSTEERSettings(CoSTEERSettings):
@@ -37,9 +38,19 @@ def get_factor_env(
 ) -> Env:
     conf = FactorCoSTEERSettings()
     if hasattr(conf, "python_bin"):
-        env = LocalEnv(conf=(CondaConf(conda_env_name=os.environ.get("CONDA_DEFAULT_ENV"))))
+        # Source installs commonly run in a venv rather than Conda. Use the
+        # active interpreter directly so generated factor code executes in the
+        # same tested Python environment as RD-Agent.
+        env = LocalEnv(
+            conf=LocalConf(
+                bin_path=str(Path(sys.executable).parent),
+                default_entry="python main.py",
+            )
+        )
     env.conf.extra_volumes = extra_volumes.copy()
-    env.conf.running_timeout_period = running_timeout_period
+    # macOS does not provide GNU `timeout`; LocalEnv's wrapper would fail before
+    # Python starts. CoSTEER retains its own file execution timeout.
+    env.conf.running_timeout_period = None
     if enable_cache is not None:
         env.conf.enable_cache = enable_cache
     env.prepare()

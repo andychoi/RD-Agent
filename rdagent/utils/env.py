@@ -1520,10 +1520,11 @@ class QTDockerEnv(DockerEnv):
         """
         super().prepare()
         qlib_data_path = next(iter(self.conf.extra_volumes.keys()))
-        if not (Path(qlib_data_path) / "qlib_data" / "cn_data").exists():
-            logger.info("We are downloading!")
-            cmd = "python -m qlib.run.get_data qlib_data --target_dir ~/.qlib/qlib_data/cn_data --region cn --interval 1d --delete_old False"
-            self.check_output(entry=cmd)
+        if not (Path(qlib_data_path) / "qlib_data" / "us_sp500_alpaca").exists():
+            raise FileNotFoundError(
+                "Required Alpaca Qlib data not found at "
+                f"{Path(qlib_data_path) / 'qlib_data' / 'us_sp500_alpaca'}"
+            )
         else:
             logger.info("Data already exists. Download skipped.")
 

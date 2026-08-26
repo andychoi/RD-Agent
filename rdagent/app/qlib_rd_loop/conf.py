@@ -74,6 +74,9 @@ class FactorBasePropSetting(BasePropSetting):
     evolving_n: int = 10
     """Number of evolutions"""
 
+    max_factors_per_exp: int = 1
+    """Maximum number of generated factors retained for one factor experiment"""
+
     train_start: str = "2008-01-01"
     """Start date of the training segment"""
 
